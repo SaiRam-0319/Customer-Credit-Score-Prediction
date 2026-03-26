@@ -62,19 +62,20 @@ st.markdown("""
 # ── Load Model ─────────────────────────────────────────────
 @st.cache_resource
 def load_model():
-    model  = joblib.load('customer_credit_score_model.pkl')
-    scaler = joblib.load('scaler.pkl')
-    return model, scaler
+    model      = joblib.load("customer_credit_score_model.pkl")
+    scaler     = joblib.load("scaler.pkl")
+    train_cols = joblib.load("train_columns.pkl")
+    return model, scaler, train_cols
 
 le = LabelEncoder()
 le.classes_ = np.array(['Bad', 'Good', 'Standard'])
 
 try:
-    model, scaler = load_model()
+    model, scaler, train_cols = load_model()
     model_loaded  = True
 except:
     model_loaded  = False
-    st.error("❌ Model files not found. Make sure both .pkl files are in the same folder as app.py")
+    st.error("❌ Model files not found. Make sure all .pkl files are in the same folder as app.py")
 
 # ── Input Form ─────────────────────────────────────────────
 st.markdown('<div class="section-title">Personal Information</div>', unsafe_allow_html=True)
@@ -163,6 +164,7 @@ if predict_btn and model_loaded:
         input_df[f'Payment_Behaviour_{pb}'] = 1 if payment_behaviour == pb else 0
 
     try:
+        input_df     = input_df.reindex(columns=train_cols, fill_value=0)
         input_scaled = scaler.transform(input_df)
         prediction   = model.predict(input_scaled)[0]
         proba        = model.predict_proba(input_scaled)[0]
