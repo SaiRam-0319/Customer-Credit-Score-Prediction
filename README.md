@@ -111,7 +111,7 @@ streamlit run app.py
 
 ## 👩‍💻 Author
 
-**Sneha**
+**Sai Ram Babu**
 B.Tech Student · Machine Learning Enthusiast
 
 [![GitHub](https://img.shields.io/badge/GitHub-your_username-black?style=flat-square&logo=github)](https://github.com/your_username)
